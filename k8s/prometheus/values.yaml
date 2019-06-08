@@ -1,0 +1,3 @@
+server:
+  prefixURL: "/prometheus"
+  baseURL: "http://gke.devopstar.com/prometheus"

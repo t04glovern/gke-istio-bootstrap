@@ -1,0 +1,31 @@
+adminUser: admin
+adminPassword: admin
+datasources:
+  datasources.yaml:
+    apiVersion: 1
+    datasources:
+    - name: Prometheus
+      type: prometheus
+      url: http://gke.devopstar.com/prometheus
+      access: browser
+      isDefault: true
+dashboardProviders:
+  dashboardproviders.yaml:
+    apiVersion: 1
+    providers:
+    - name: 'default'
+      orgId: 1
+      folder: ''
+      type: file
+      disableDeletion: false
+      editable: true
+      options:
+        path: /var/lib/grafana/dashboards/default
+dashboards:
+  default:
+    nginx-dashboard:
+      url: http://gke.devopstar.com/hosting/nginx-dashboard.json
+grafana.ini:
+  server:
+    domain: gke.devopstar.com
+    root_url: '%(protocol)s://%(domain)s/grafana/'

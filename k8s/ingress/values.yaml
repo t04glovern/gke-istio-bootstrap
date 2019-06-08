@@ -1,0 +1,14 @@
+controller:
+  metrics: {
+    enabled: true,
+    service: {
+      annotations: {
+        prometheus.io/scrape: "true"
+      }
+    }
+  }
+  service: {
+    annotations: {
+        external-dns.alpha.kubernetes.io/hostname: gke.devopstar.com
+    }
+  }
