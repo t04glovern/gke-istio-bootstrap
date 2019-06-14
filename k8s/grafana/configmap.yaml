@@ -1,0 +1,19 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: grafana-prometheus-datasource-configmap
+  labels:
+    grafana_datasource: "grafana_datasource"
+    app.kubernetes.io/name: grafana-prometheus-datasource-configmap
+data:
+  prometheus-datasource.yaml: |
+    apiVersion: 1
+    datasources:
+    - name: Prometheus
+      type: prometheus
+      access: browser
+      url: http://gke.devopstar.com/prometheus
+      isDefault: true
+      editable: false
+---

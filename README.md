@@ -129,6 +129,22 @@ gcloud container clusters get-credentials <project_id>-gke \
   --region australia-southeast1
 ```
 
+#### Install Istio
+
+```bash
+# Initialize Istio
+./k8s/istio/istio.sh <project_id> init
+
+# Install Istio Services
+./k8s/istio/istio.sh <project_id> install
+```
+
+##### Configuration
+
+```bash
+kubectl apply -f k8s/istio/networking
+```
+
 #### Role-based Access Control (RBAC)
 
 We'll deploy an RBAC configuration that is used by helm. Perform the following actions from the Bastion server
@@ -147,13 +163,17 @@ helm init --service-account tiller --history-max 200
 ### Install External DNS
 
 ```bash
-helm install --name external-dns stable/external-dns -f external-dns.yaml --wait
+helm install \
+  --name external-dns stable/external-dns \
+  -f external-dns.yaml --wait
 ```
 
 ### Install Ingress
 
 ```bash
-helm install --name ingress stable/nginx-ingress -f ingress/values.yaml --wait
+helm install \
+  --name ingress stable/nginx-ingress \
+  -f ingress/values.yaml --wait
 ```
 
 ### Install Ingress Rules
@@ -165,16 +185,23 @@ kubectl apply -f ingress/rules.yaml
 ### Install Prometheus & Grafana
 
 ```bash
-helm install --name hosting ./hosting/ --wait
-helm install --name prometheus stable/prometheus -f prometheus/values.yaml --wait
-helm install --name grafana stable/grafana -f grafana/values.yaml --wait
+helm install \
+  --name prometheus stable/prometheus \
+  -f prometheus/values.yaml --wait
+
+kubectl apply \
+  -f grafana/configmap.yaml
+helm install \
+  --name grafana stable/grafana \
+  -f grafana/values.yaml --wait
 ```
 
 ### Delete Packages
 
 ```bash
-helm delete --purge external-dns ingress grafana prometheus hosting
-kubectl delete ingress ingress-utils ingress-grafana
+helm delete --purge external-dns grafana prometheus
+kubectl delete -f k8s/istio/networking
+./k8s/istio/istio.sh <project_id> remove
 ```
 
 ## Attribution

@@ -102,6 +102,10 @@ aws:
     accessKey: '$ACCESS_KEY'
 rbac:
     create: true
+sources:
+    - service
+    - ingress
+    - istio-gateway
 EOF
         else
             echo "Deleting $PROJECT_ID-route53-user stack"
