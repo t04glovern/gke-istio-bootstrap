@@ -1,0 +1,106 @@
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: external-vs
+spec:
+  hosts:
+  - gke.devopstar.com
+  gateways:
+  - http-gateway
+  http:
+  - match:
+    - uri:
+        prefix: /prometheus
+    route:
+    - destination:
+        host: prometheus-server
+        port:
+          number: 80
+  - match:
+    - uri:
+        prefix: /grafana/
+    route:
+    - destination:
+        host: grafana
+        port:
+          number: 80
+    rewrite:
+      uri: /
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: istio-kiali-vs
+  namespace: istio-system
+spec:
+  hosts:
+  - gke.devopstar.com
+  gateways:
+  - istio-kiali-gateway
+  http:
+  - match:
+    - port: 15029
+    route:
+    - destination:
+        host: kiali
+        port:
+          number: 20001
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: istio-prometheus-vs
+  namespace: istio-system
+spec:
+  hosts:
+  - gke.devopstar.com
+  gateways:
+  - istio-prometheus-gateway
+  http:
+  - match:
+    - port: 15030
+    route:
+    - destination:
+        host: prometheus
+        port:
+          number: 9090
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: istio-grafana-vs
+  namespace: istio-system
+spec:
+  hosts:
+  - gke.devopstar.com
+  gateways:
+  - istio-grafana-gateway
+  http:
+  - match:
+    - port: 15031
+    route:
+    - destination:
+        host: grafana
+        port:
+          number: 3000
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: istio-tracing-vs
+  namespace: istio-system
+spec:
+  hosts:
+  - gke.devopstar.com
+  gateways:
+  - istio-tracing-gateway
+  http:
+  - match:
+    - port: 15032
+    route:
+    - destination:
+        host: tracing
+        port:
+          number: 80
+---
