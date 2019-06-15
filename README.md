@@ -99,6 +99,8 @@ gcloud container clusters get-credentials <project_id>-gke \
 
 ### Istio Install
 
+**Note**: If you have a domain name you will be using, make sure to replace *DNS_NAME* with that entry. If you aren't going to use one, you'll need to patch out references to `gke.devopstar.com` replacing it with the ingres IP you are assigned later.
+
 ```bash
 # Initialize Istio
 ./k8s/istio/istio.sh <project_id> init
@@ -109,8 +111,28 @@ gcloud container clusters get-credentials <project_id>-gke \
 
 ### Configure Istio
 
+#### Gateways
+
 ```bash
-kubectl apply -f k8s/istio/networking
+kubectl apply -f k8s/istio/gateways
+```
+
+#### Destination Rules
+
+```bash
+kubectl apply -f k8s/istio/destination-rules
+```
+
+#### Virtual Services
+
+```bash
+kubectl apply -f k8s/istio/virtual-services
+```
+
+#### Whitelist
+
+```bash
+kubectl apply -f k8s/istio/whitelists
 ```
 
 ---
@@ -157,7 +179,6 @@ helm install \
 
 ```bash
 helm delete --purge external-dns grafana prometheus
-kubectl delete -f k8s/istio/networking
 ./k8s/istio/istio.sh <project_id> remove
 ```
 

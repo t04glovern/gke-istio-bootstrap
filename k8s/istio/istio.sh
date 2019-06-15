@@ -12,7 +12,6 @@ case "$2" in
     "init"      )
         curl -L https://git.io/getLatestIstio | ISTIO_VERSION=$ISTIO_VERSION sh -
         cd istio-$ISTIO_VERSION/
-
         # Guide: https://istio.io/docs/setup/kubernetes/install/helm/
         kubectl create namespace istio-system
         helm template install/kubernetes/helm/istio-init \
@@ -39,7 +38,7 @@ EOF
 
     "install"   )
         cd istio-$ISTIO_VERSION/
-        # Create Services
+        # Create System
         helm template install/kubernetes/helm/istio \
             --name istio \
             --set global.mtls.enabled=false \
@@ -54,10 +53,15 @@ EOF
         ;;
 
     "remove"    )
+        # Remove Istio Services
+        kubectl delete -f k8s/istio/gateways
+        kubectl delete -f k8s/istio/destination-rules
+        kubectl delete -f k8s/istio/virtual-services
+        kubectl delete -f k8s/istio/whitelists
         cd istio-$ISTIO_VERSION/
         # Disable Istio
         kubectl label namespace default istio-injection=disabled --overwrite
-        # Delete Services
+        # Delete System
         helm template install/kubernetes/helm/istio \
             --name istio \
             --set global.mtls.enabled=false \

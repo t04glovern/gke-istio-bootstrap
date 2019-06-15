@@ -1,0 +1,20 @@
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: istio-kiali
+  namespace: istio-system
+spec:
+  hosts:
+  - gke.devopstar.com
+  gateways:
+  - istio-kiali
+  http:
+  - match:
+    - port: 15029
+    route:
+    - destination:
+        host: kiali
+        port:
+          number: 20001
+---
