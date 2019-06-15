@@ -1,6 +1,7 @@
 #!/bin/sh
 
 PROJECT_ID="$1"
+PROJECT_REGION="australia-southeast1"
 
 # Set Project
 gcloud config set project $PROJECT_ID
@@ -50,7 +51,7 @@ case "$2" in
 
             gcloud compute routers nats create $PROJECT_ID-nat \
                 --router=$PROJECT_ID-cloud-router \
-                --router-region=australia-southeast1 \
+                --router-region=$PROJECT_REGION \
                 --auto-allocate-nat-external-ips \
                 --nat-all-subnet-ip-ranges
         else
@@ -60,7 +61,7 @@ case "$2" in
             echo "Deleting $PROJECT_ID-nat"
             gcloud compute routers nats delete $PROJECT_ID-nat \
                 --router=$PROJECT_ID-cloud-router \
-                --router-region=australia-southeast1 -q
+                --router-region=$PROJECT_REGION -q
         fi
         ;;
     "gke"           )
@@ -113,8 +114,27 @@ EOF
             rm k8s/external-dns.yaml
         fi
         ;;
+    "all"           )
+        if [ "$DEPLOY_ACTION" = "create" ]; then
+            echo "Creating all in $PROJECT_ID"
+            ./deploy.sh $PROJECT_ID iam create
+            ./deploy.sh $PROJECT_ID network create
+            ./deploy.sh $PROJECT_ID cloud-router create
+            ./deploy.sh $PROJECT_ID gke create
+            ./deploy.sh $PROJECT_ID bastion create
+            ./deploy.sh $PROJECT_ID dns create
+        else
+            echo "Deleting all in $PROJECT_ID"
+            ./deploy.sh $PROJECT_ID iam delete
+            ./deploy.sh $PROJECT_ID network delete
+            ./deploy.sh $PROJECT_ID cloud-router delete
+            ./deploy.sh $PROJECT_ID gke delete
+            ./deploy.sh $PROJECT_ID bastion delete
+            ./deploy.sh $PROJECT_ID dns delete
+        fi
+        ;;
     *               )
-        echo "Script requires a resource. E.g. iam, network, cloud-router, gke, bastion"
+        echo "Script requires a resource. E.g. iam, network, cloud-router, gke, bastion, dns or all"
         exit 1
         ;;
 esac
