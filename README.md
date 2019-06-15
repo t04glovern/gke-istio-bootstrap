@@ -12,6 +12,24 @@ Google Cloud Platform Deployment Manager bootstrap for GKE
 
 ---
 
+## Endpoints
+
+### istio-system Namespace
+
+| Service    | Endpoint                                                                                     |
+|------------|----------------------------------------------------------------------------------------------|
+| kiali      | [http://gke.devopstar.com:15029/kiali/console](http://gke.devopstar.com:15029/kiali/console) |
+| prometheus | [http://gke.devopstar.com:15030](http://gke.devopstar.com:15030)                             |
+| grafana    | [http://gke.devopstar.com:15031](http://gke.devopstar.com:15031)                             |
+| tracing    | [http://gke.devopstar.com:15032](http://gke.devopstar.com:15032)                             |
+
+### default Namespace
+
+| Service    | Endpoint                                                                         |
+|------------|----------------------------------------------------------------------------------|
+| prometheus | [http://gke.devopstar.com/prometheus](http://gke.devopstar.com/prometheus)       |
+| grafana    | [http://gke.devopstar.com/grafana/login](http://gke.devopstar.com/grafana/login) |
+
 ## Setup
 
 ---
@@ -24,14 +42,14 @@ Google Cloud Platform Deployment Manager bootstrap for GKE
 
 Resources must be deployed and removed in the following order
 
-| create             | delete              |
-|--------------------|---------------------|
-| iam                | dns                 |
-| network            | bastion             |
-| cloud-router       | gke                 |
-| gke                | cloud-router        |
-| bastion            | network             |
-| dns                | iam
+| create       | delete       |
+|--------------|--------------|
+| iam          | dns          |
+| network      | bastion      |
+| cloud-router | gke          |
+| gke          | cloud-router |
+| bastion      | network      |
+| dns          | iam          |
 
 Or simply run the following to bring it all up
 
@@ -107,8 +125,7 @@ We'll deploy an RBAC configuration that is used by helm. Perform the following a
 
 ```bash
 # Create tiller service account & cluster role binding
-cd k8s
-kubectl create -f rbac-config.yaml
+kubectl create -f k8s/rbac-config.yaml
 
 # init helm with the service account
 helm init --service-account tiller --history-max 200
@@ -119,7 +136,7 @@ helm init --service-account tiller --history-max 200
 ```bash
 helm install \
   --name external-dns stable/external-dns \
-  -f external-dns.yaml --wait
+  -f k8s/external-dns.yaml --wait
 ```
 
 ### Install Prometheus & Grafana
@@ -127,13 +144,13 @@ helm install \
 ```bash
 helm install \
   --name prometheus stable/prometheus \
-  -f prometheus/values.yaml --wait
+  -f k8s/prometheus/values.yaml --wait
 
 kubectl apply \
-  -f grafana/configmap.yaml
+  -f k8s/grafana/configmap.yaml
 helm install \
   --name grafana stable/grafana \
-  -f grafana/values.yaml --wait
+  -f k8s/grafana/values.yaml --wait
 ```
 
 ### Delete Packages

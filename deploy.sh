@@ -125,12 +125,12 @@ EOF
             ./deploy.sh $PROJECT_ID dns create
         else
             echo "Deleting all in $PROJECT_ID"
-            ./deploy.sh $PROJECT_ID iam delete
-            ./deploy.sh $PROJECT_ID network delete
-            ./deploy.sh $PROJECT_ID cloud-router delete
-            ./deploy.sh $PROJECT_ID gke delete
-            ./deploy.sh $PROJECT_ID bastion delete
             ./deploy.sh $PROJECT_ID dns delete
+            ./deploy.sh $PROJECT_ID bastion delete
+            ./deploy.sh $PROJECT_ID gke delete
+            ./deploy.sh $PROJECT_ID cloud-router delete
+            ./deploy.sh $PROJECT_ID network delete
+            ./deploy.sh $PROJECT_ID iam delete
         fi
         ;;
     *               )

@@ -2,6 +2,7 @@
 
 PROJECT_ID="$1"
 ISTIO_VERSION="1.1.8"
+DNS_NAME="gke.devopstar.com"
 
 gcloud container clusters get-credentials $PROJECT_ID-gke \
     --region australia-southeast1 \
@@ -42,10 +43,14 @@ EOF
         helm template install/kubernetes/helm/istio \
             --name istio \
             --set global.mtls.enabled=false \
+            --set tracing.enabled=true \
+            --set "kiali.dashboard.jaegerURL=http://$DNS_NAME:15032" \
+            --set "kiali.dashboard.grafanaURL=http://$DNS_NAME:15031" \
             --set kiali.enabled=true \
+            --set grafana.enabled=true \
             --namespace istio-system | kubectl apply -f -
         # Enable Istio
-        kubectl label namespace default istio-injection=enabled
+        kubectl label namespace default istio-injection=enabled --overwrite
         ;;
 
     "remove"    )
@@ -56,7 +61,11 @@ EOF
         helm template install/kubernetes/helm/istio \
             --name istio \
             --set global.mtls.enabled=false \
+            --set tracing.enabled=true \
+            --set "kiali.dashboard.jaegerURL=http://$DNS_NAME:15032" \
+            --set "kiali.dashboard.grafanaURL=http://$DNS_NAME:15031" \
             --set kiali.enabled=true \
+            --set grafana.enabled=true \
             --namespace istio-system | kubectl delete -f -
         # Delete CRDs
         kubectl delete -f install/kubernetes/helm/istio-init/files

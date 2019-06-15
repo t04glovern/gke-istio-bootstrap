@@ -17,7 +17,7 @@ spec:
 apiVersion: networking.istio.io/v1alpha3
 kind: Gateway
 metadata:
-  name: kiali-gateway
+  name: istio-kiali-gateway
   namespace: istio-system
 spec:
   selector:
@@ -30,3 +30,50 @@ spec:
     hosts:
     - gke.devopstar.com
 ---
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: istio-prometheus-gateway
+  namespace: istio-system
+spec:
+  selector:
+    istio: ingressgateway
+  servers:
+  - port:
+      number: 15030
+      name: http-prometheus
+      protocol: HTTP
+    hosts:
+    - gke.devopstar.com
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: istio-grafana-gateway
+  namespace: istio-system
+spec:
+  selector:
+    istio: ingressgateway
+  servers:
+  - port:
+      number: 15031
+      name: http-grafana
+      protocol: HTTP
+    hosts:
+    - gke.devopstar.com
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: istio-tracing-gateway
+  namespace: istio-system
+spec:
+  selector:
+    istio: ingressgateway
+  servers:
+  - port:
+      number: 15032
+      name: http-tracing
+      protocol: HTTP
+    hosts:
+    - gke.devopstar.com
