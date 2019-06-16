@@ -1,6 +1,6 @@
-# GKE Private - Boostrap
+# GKE Istio - Boostrap
 
-Google Cloud Platform Deployment Manager bootstrap for GKE
+Google Cloud Platform Istio bootstrap for GKE
 
 ---
 
