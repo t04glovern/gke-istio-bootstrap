@@ -4,6 +4,19 @@ Google Cloud Platform Istio bootstrap for GKE
 
 ---
 
+## Guides
+
+---
+
+* [Practical Istio - Introduction](https://devopstar.com/2019/06/16/practical-istio-introduction-and-setup/)
+  * A brief introduction into Istio and its role in modern production Kubernetes. We prepare for the future instalments of Practical Istio.
+* [Practical Istio - Private Kubernetes Deployment](https://devopstar.com/2019/06/16/practical-istio-private-kubernetes-deploy/)
+  * Deployment of Kubernetes onto GKE making use of GCP Deployment Manager. The process insures we end up with a robust private cluster to work with moving forward.
+* [Practical Istio - Init & Install](https://devopstar.com/2019/06/16/practical-istio-init-and-install/)
+  * Initialising the Istio Custom Definitions and installing Istio onto our fresh Kubernetes cluster.
+
+---
+
 ## Architecture
 
 ---
