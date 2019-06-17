@@ -55,13 +55,13 @@ case "$2" in
                 --auto-allocate-nat-external-ips \
                 --nat-all-subnet-ip-ranges
         else
-            echo "Deleting $PROJECT_ID-cloud-router"
-            gcloud deployment-manager deployments delete $PROJECT_ID-cloud-router -q
-
             echo "Deleting $PROJECT_ID-nat"
             gcloud compute routers nats delete $PROJECT_ID-nat \
                 --router=$PROJECT_ID-cloud-router \
                 --router-region=$PROJECT_REGION -q
+
+            echo "Deleting $PROJECT_ID-cloud-router"
+            gcloud deployment-manager deployments delete $PROJECT_ID-cloud-router -q
         fi
         ;;
     "gke"           )

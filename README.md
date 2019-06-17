@@ -14,6 +14,10 @@ Google Cloud Platform Istio bootstrap for GKE
   * Deployment of Kubernetes onto GKE making use of GCP Deployment Manager. The process insures we end up with a robust private cluster to work with moving forward.
 * [Practical Istio - Init & Install](https://devopstar.com/2019/06/16/practical-istio-init-and-install/)
   * Initialising the Istio Custom Definitions and installing Istio onto our fresh Kubernetes cluster.
+* [Practical Istio - Ingress Gateway](https://devopstar.com/2019/06/17/practical-istio-ingress-gateway/)
+  * Configure a number of different Istio Ingress Gateways allowing traffic in for our various services.
+* [Practical Istio - Virtual Services](https://devopstar.com/2019/06/17/practical-istio-virtual-services/)
+  * Configure Istio VirtualService components to route Kiali, Jaeger, Prometheus and Grafana endpoints to the correct services.
 
 ---
 
@@ -130,16 +134,16 @@ gcloud container clusters get-credentials <project_id>-gke \
 kubectl apply -f k8s/istio/gateways
 ```
 
-#### Destination Rules
-
-```bash
-kubectl apply -f k8s/istio/destination-rules
-```
-
 #### Virtual Services
 
 ```bash
 kubectl apply -f k8s/istio/virtual-services
+```
+
+#### Destination Rules
+
+```bash
+kubectl apply -f k8s/istio/destination-rules
 ```
 
 #### Whitelist
